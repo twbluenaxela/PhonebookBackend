@@ -66,7 +66,9 @@ const generateId = () => {
   const maxId = persons.length > 0
   ? Math.max(...persons.map((p) => p.id))
   : 0
-  return maxId
+  const min = 0
+  const randomId = Math.floor(Math.random() * (1000 - min) + min)
+  return randomId
 }
 
 app.post('/api/persons', (request, response) => {
@@ -84,7 +86,8 @@ app.post('/api/persons', (request, response) => {
     id: generateId()
   }
 
-  persons.concat(person)
+  persons = persons.concat(person)
+  console.log(persons)
   response.json(person)
 
 })
