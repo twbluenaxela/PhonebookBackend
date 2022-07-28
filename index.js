@@ -73,10 +73,20 @@ const generateId = () => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
+  const existsDuplicateName = persons.find(person => person.name === body.name)
   console.log(body);
   if(!body.name){
     return response.status(400).json({
       error: 'name missing'
+    })
+  }else if(!body.number){
+    return response.status(400).json({
+      error: 'number missing'
+    })
+  }else if(existsDuplicateName){
+    return response.status(400).json({
+      error: `${body.name} already has been added to the database.
+      Please add a different name.`
     })
   }
 
