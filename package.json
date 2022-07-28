@@ -1,0 +1,27 @@
+{
+  "name": "phonebookbackend",
+  "version": "1.0.0",
+  "description": "Backend for phonebook app  通讯录应用的后端",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twbluenaxela/PhonebookBackend.git"
+  },
+  "author": "Nick Yu 于乐洋",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/twbluenaxela/PhonebookBackend/issues"
+  },
+  "homepage": "https://github.com/twbluenaxela/PhonebookBackend#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
