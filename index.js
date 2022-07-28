@@ -26,6 +26,10 @@ let persons = [
 ]
 app.use(express.json())
 
+app.get('/', (request, response) => {
+  response.send(`<h1>Please visit other links.</h1>`)
+})
+
 app.get('/api/persons', (request, response) => {
     response.send(persons)
 })
@@ -49,6 +53,13 @@ app.get('/info', (request, response) => {
     <p>${dateTime}</p>
   </div>`
   response.send(infoElement)
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter((person) => person.id !== id)
+  console.log("Persons: ", persons);
+  response.status(204).end()
 })
 
 const PORT = 3001;
