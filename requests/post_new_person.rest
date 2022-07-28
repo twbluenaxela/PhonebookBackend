@@ -2,7 +2,7 @@ POST https://3001-twbluenaxel-phonebookba-xy4mblpdbat.ws-us54.gitpod.io/api/pers
 Content-Type: application/json
 
 {
-    "name": "Supaman",
+    "name": "",
     "number": "7022339299"
 }
 
