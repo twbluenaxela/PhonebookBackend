@@ -34,7 +34,7 @@ app.get('/api/persons', (request, response) => {
     response.send(persons)
 })
 
-app.get('/api/person/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
   if (person) {
@@ -60,6 +60,33 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = persons.filter((person) => person.id !== id)
   console.log("Persons: ", persons);
   response.status(204).end()
+})
+
+const generateId = () => {
+  const maxId = persons.length > 0
+  ? Math.max(...persons.map((p) => p.id))
+  : 0
+  return maxId
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  console.log(body);
+  if(!body.name){
+    return response.status(400).json({
+      error: 'name missing'
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId()
+  }
+
+  persons.concat(person)
+  response.json(person)
+
 })
 
 const PORT = 3001;
