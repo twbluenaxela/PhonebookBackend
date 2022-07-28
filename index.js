@@ -1,5 +1,6 @@
 const { request, response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let persons = [
@@ -24,7 +25,20 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+
+const requestLogger = (request, response, next) => {
+  console.log('Method: ', request.method);
+  console.log('Path: ', request.path);
+  console.log('Body: ', request,body);
+  console.log('---');
+  next()
+}
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+
+
 app.use(express.json())
+// app.use(requestLogger)
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/', (request, response) => {
   response.send(`<h1>Please visit other links.</h1>`)
@@ -74,7 +88,7 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
   const existsDuplicateName = persons.find(person => person.name === body.name)
-  console.log(body);
+  // console.log(body);
   if(!body.name){
     return response.status(400).json({
       error: 'name missing'
@@ -97,10 +111,15 @@ app.post('/api/persons', (request, response) => {
   }
 
   persons = persons.concat(person)
-  console.log(persons)
+  // console.log(persons)
   response.json(person)
 
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({error: 'unknown endpoint'})
+}
+app.use(unknownEndpoint)
 
 const PORT = 3001;
 
