@@ -34,14 +34,14 @@ if (process.argv.length === 3) {
   console.log("Starting find function...");
   console.log("Current processes...", process.argv);
   Person.find({}).then((result) => {
-    console.log("Result: ");
+    console.log("Phonebook: ");
     result.forEach((person) => {
       console.log(person);
     });
     mongoose.connection.close();
   });
 } else if (process.argv.length > 3 && process.argv.length <= 5) {
-  console.log("Commencing new entry...");
+  console.log("Adding to phonebook...");
   console.log("Current processes...", process.argv);
   person.save().then((result) => {
     console.log(`Added ${name} number ${number} to phonebook`);
