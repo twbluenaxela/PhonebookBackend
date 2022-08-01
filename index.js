@@ -1,8 +1,9 @@
+require('dotenv').config()
 const { request, response } = require("express");
 const express = require("express");
 const morgan = require("morgan");
 const cors = require('cors')
-
+const Person = require('./models/person')
 const app = express();
 
 
@@ -44,17 +45,23 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/persons", (request, response) => {
-  response.send(persons);
+  // response.send(persons);
+  Person.find({}).then(people => {
+    response.json(people)
+  })
 });
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const person = persons.find((person) => person.id === id);
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+  // const id = Number(request.params.id);
+  // const person = persons.find((person) => person.id === id);
+  // if (person) {
+  //   response.json(person);
+  // } else {
+  //   response.status(404).end();
+  // }
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
 });
 
 app.get("/info", (request, response) => {
@@ -94,23 +101,23 @@ app.post("/api/persons", (request, response) => {
   } else if (!body.number) {
     return response.status(400).json({
       error: "number missing",
-    });
-  } else if (existsDuplicateName) {
-    return response.status(400).json({
-      error: `${body.name} already has been added to the database.
-      Please add a different name.`,
-    });
-  }
+    });}
+  // } else if (existsDuplicateName) {
+  //   return response.status(400).json({
+  //     error: `${body.name} already has been added to the database.
+  //     Please add a different name.`,
+  //   });
+  // }
 
-  const person = {
+  const person = new Person ({
     name: body.name,
-    number: body.number,
-    id: generateId(),
-  };
+    number: body.number
+  })
 
-  persons = persons.concat(person);
-  // console.log(persons)
-  response.json(person);
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
+
 });
 
 const unknownEndpoint = (request, response) => {
