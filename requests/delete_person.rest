@@ -1,4 +1,4 @@
-DELETE https://3001-twbluenaxel-phonebookba-xy4mblpdbat.ws-us54.gitpod.io/api/persons/2
+DELETE https://3001-twbluenaxel-phonebookba-yi3ok05vrb6.ws-us54.gitpod.io/api/persons/62e75a26157615a8424954b7
 
 ###
 GET https://3001-twbluenaxel-phonebookba-xy4mblpdbat.ws-us54.gitpod.io/api/persons
