@@ -59,7 +59,6 @@ app.get("/api/persons", (request, response) => {
 });
 
 app.get("/api/persons/:id", (request, response, next) => {
-
   Person.findById(request.params.id)
     .then((person) => {
       if (person) {
@@ -73,14 +72,14 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.get("/info", (request, response) => {
   Person.find({}).then((people) => {
-    const numOfPersons = people.length
+    const numOfPersons = people.length;
     const dateTime = new Date();
     const infoElement = `<div>
       <p>Phonebook has info for ${numOfPersons} people</p>
       <p>${dateTime}</p>
     </div>`;
     response.send(infoElement);
-    })
+  });
 });
 
 app.delete("/api/persons/:id", (request, response, next) => {
@@ -97,9 +96,13 @@ app.put("/api/persons/:id", (request, response, next) => {
   //   name: body.name,
   //   number: body.number,
   // };
-  const {name, number} = request.body
+  const { name, number } = request.body;
 
-  Person.findByIdAndUpdate(request.params.id, {name, number}, { new: true, runValidators:true, context:'query' })
+  Person.findByIdAndUpdate(
+    request.params.id,
+    { name, number },
+    { new: true, runValidators: true}
+  )
     .then((updatedPerson) => {
       response.json(updatedPerson);
     })
@@ -123,10 +126,21 @@ app.post("/api/persons", (request, response, next) => {
     number: body.number,
   });
 
-  person.save().then((savedPerson) => {
-    response.json(savedPerson);
-  })
-  .catch(error => next(error))
+  Person.find({ name: body.name }).then((foundPeople) => {
+    console.log("Found person", foundPeople);
+    console.log("Found people length: ", foundPeople.length);
+    if (foundPeople.length > 0) {
+      return response
+        .status(400)
+        .send({ error: "User already exists. Attempt to add failed." });
+    }
+    person
+      .save()
+      .then((savedPerson) => {
+        response.json(savedPerson);
+      })
+      .catch((error) => next(error));
+  });
 });
 
 const unknownEndpoint = (request, response) => {
@@ -138,8 +152,8 @@ const errorHandler = (error, req, res, next) => {
   console.log(error.message);
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
-  }else if (error.name === 'ValidationError'){
-    return res.status(400).json({error: error.message})
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({ error: error.message });
   }
   next(error);
 };
